@@ -1,33 +1,21 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { FC } from 'react'
+import { Grid } from "@mui/material";
+import Invoice from "./features/invoice";
 
-function App() {
-  const [count, setCount] = useState(0);
-
+const App: FC = () => {
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Grid container direction="row">
+        <Grid item xs={12} lg={6} xl={4}>
+          Purchase Order UI
+        </Grid>
+        <Grid item xs={12} lg={6} xl={4}>
+          <Invoice />
+        </Grid>
+        <Grid item xs={12} lg={12} xl={4}>
+          Comparison UI
+        </Grid>
+      </Grid>
     </>
   );
 }

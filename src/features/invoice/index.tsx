@@ -1,8 +1,9 @@
 import { FC, ReactNode } from "react";
-import { selectLineItems, selectLoadingState } from "./slice.ts";
+import { selectLineItems } from "./slice.ts";
 import { useAppSelector } from "../../redux/hooks.ts";
 import { Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import FileUpload from "./FileUpload.tsx";
 
 const cols: GridColDef[] = [
   {
@@ -32,12 +33,12 @@ const cols: GridColDef[] = [
 
 const Invoice: FC = () => {
   const lineItems = useAppSelector(selectLineItems);
-  const loadingState = useAppSelector(selectLoadingState);
 
   const getContent: () => ReactNode = () => {
     if (lineItems !== null) {
       return <DataGrid columns={cols} rows={lineItems} />;
     }
+    return <FileUpload />;
   };
 
   return <Box>{getContent()}</Box>;
