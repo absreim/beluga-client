@@ -43,6 +43,7 @@ const FileUpload: FC = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
+            cursor: "pointer",
           }}
         >
           <input {...getInputProps()} accept="application/pdf" />
