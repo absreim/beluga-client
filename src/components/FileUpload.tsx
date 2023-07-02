@@ -1,6 +1,6 @@
 import { FC, useCallback, useRef, useState } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
-import { Alert, Box, Button, Stack } from "@mui/material";
+import { Alert, Box, Button, Paper, Stack, Typography } from "@mui/material";
 
 type OnDropHandler = DropzoneOptions['onDrop']
 
@@ -28,10 +28,9 @@ const FileUpload: FC<Props> = ({ accept, handleUpload, loadingState }) => {
         <Alert color="error">Error uploading file.</Alert>
       )}
       {!filesPresent && (
-        <Box
+        <Paper
           {...getRootProps()}
           sx={{
-            border: 1,
             backgroundColor: "primary.light",
             padding: 1,
             minHeight: "10rem",
@@ -39,18 +38,19 @@ const FileUpload: FC<Props> = ({ accept, handleUpload, loadingState }) => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
+            cursor: "pointer",
           }}
         >
           <input {...getInputProps()} accept={accept} />
           {isDragActive ? (
-            <p>Drop the files here ...</p>
+            <Typography>Drop invoice here</Typography>
           ) : (
-            <p>Drag 'n' drop some files here, or click to select files</p>
+            <Typography>Upload Invoice</Typography>
           )}
-        </Box>
+        </Paper>
       )}
       {filesPresent && (
-        <Stack direction="row">
+        <Stack direction="row" gap={2}>
           <Button
             variant="outlined"
             onClick={() => setFilesPresent(false)}
