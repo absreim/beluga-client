@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/store";
 import { fetchDocumentAiResults } from "./api";
+import { nanoid } from "nanoid/non-secure";
 
 export interface InvoiceLineItem {
+  id: string;
   productCode: string;
   description: string;
   quantity: number | null;
@@ -56,6 +58,7 @@ export const uploadInvoice = createAsyncThunk(
       .filter(({ type }) => type === "line_item")
       .map(({ properties }) => {
         const row: InvoiceLineItem = {
+          id: nanoid(),
           productCode: "",
           description: "",
           quantity: null,
