@@ -48,9 +48,9 @@ const FileUpload: FC = () => {
         >
           <input {...getInputProps()} accept="application/pdf" />
           {isDragActive ? (
-            <Typography>Drop the files here ...</Typography>
+            <Typography>Drop invoice here</Typography>
           ) : (
-            <Typography>Drag 'n' drop some files here, or click to select files</Typography>
+            <Typography>Upload Invoice</Typography>
           )}
         </Paper>
       )}
