@@ -9,25 +9,30 @@ const cols: GridColDef[] = [
   {
     field: "productCode",
     headerName: "Product Code",
+    editable: true
   },
   {
     field: "description",
     headerName: "Description",
+    editable: true
   },
   {
     field: "quantity",
     headerName: "Quantity",
     type: "number",
+    editable: true
   },
   {
     field: "unitPrice",
     headerName: "Unit Price",
     type: "number",
+    editable: true
   },
   {
     field: "totalAmount",
     headerName: "Total Amount",
     type: "number",
+    editable: true
   },
 ];
 
