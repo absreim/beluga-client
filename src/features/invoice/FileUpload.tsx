@@ -1,6 +1,6 @@
 import { FC, useCallback, useRef, useState } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
-import { Alert, Box, Button, Stack } from "@mui/material";
+import { Alert, Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks.ts";
 import { selectLoadingState, uploadInvoice } from "./slice.ts";
 
@@ -33,10 +33,9 @@ const FileUpload: FC = () => {
         <Alert color="error">Error uploading file.</Alert>
       )}
       {!filesPresent && (
-        <Box
+        <Paper
           {...getRootProps()}
           sx={{
-            border: 1,
             backgroundColor: "primary.light",
             padding: 1,
             minHeight: "10rem",
@@ -48,11 +47,11 @@ const FileUpload: FC = () => {
         >
           <input {...getInputProps()} accept="application/pdf" />
           {isDragActive ? (
-            <p>Drop the files here ...</p>
+            <Typography>Drop the files here ...</Typography>
           ) : (
-            <p>Drag 'n' drop some files here, or click to select files</p>
+            <Typography>Drag 'n' drop some files here, or click to select files</Typography>
           )}
-        </Box>
+        </Paper>
       )}
       {filesPresent && (
         <Stack direction="row">
