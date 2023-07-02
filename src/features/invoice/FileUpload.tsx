@@ -55,7 +55,7 @@ const FileUpload: FC = () => {
         </Paper>
       )}
       {filesPresent && (
-        <Stack direction="row">
+        <Stack direction="row" gap={2}>
           <Button
             variant="outlined"
             onClick={() => setFilesPresent(false)}
