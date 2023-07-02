@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 import { selectLineItems } from "./slice.ts";
 import { useAppSelector } from "../../redux/hooks.ts";
 import { Box } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGridPro, GridColDef } from "@mui/x-data-grid-pro";
 import FileUpload from "./FileUpload.tsx";
 
 const cols: GridColDef[] = [
@@ -36,7 +36,7 @@ const Invoice: FC = () => {
 
   const getContent: () => ReactNode = () => {
     if (lineItems !== null) {
-      return <DataGrid columns={cols} rows={lineItems} />;
+      return <DataGridPro columns={cols} rows={lineItems} />;
     }
     return <FileUpload />;
   };
