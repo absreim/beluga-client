@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchChatgptResults } from "../purchaseOrder/api.ts";
+import { fetchChatgptResults } from "./api.ts";
 import { RootState } from "../../redux/store.ts";
 
 interface ComparisonResults {
