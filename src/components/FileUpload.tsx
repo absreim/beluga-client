@@ -68,7 +68,7 @@ const FileUpload: FC<Props> = ({
             disabled={loadingState === "loading"}
             onClick={() => files.current && handleUpload(files.current)}
           >
-            Upload
+            {loadingState === "loading" ? "Loading..." : "Upload"}
           </Button>
         </Stack>
       )}
