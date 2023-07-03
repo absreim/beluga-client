@@ -2,24 +2,29 @@ import { FC, useCallback, useRef, useState } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
 import { Alert, Box, Button, Paper, Stack, Typography } from "@mui/material";
 
-type OnDropHandler = DropzoneOptions['onDrop']
+type OnDropHandler = DropzoneOptions["onDrop"];
 
 interface Props {
-  accept: string
-  handleUpload: (files: File[]) => void
-  loadingState: 'idle' | 'loading' | 'failed'
+  accept: string;
+  handleUpload: (files: File[]) => void;
+  loadingState: "idle" | "loading" | "failed";
+  idleText: string;
+  draggingText: string;
 }
 
-const FileUpload: FC<Props> = ({ accept, handleUpload, loadingState }) => {
+const FileUpload: FC<Props> = ({
+  accept,
+  handleUpload,
+  loadingState,
+  idleText,
+  draggingText,
+}) => {
   const [filesPresent, setFilesPresent] = useState<boolean>(false);
   const files = useRef<File[] | null>(null);
-  const onDrop: OnDropHandler = useCallback(
-    (acceptedFiles: File[]) => {
-      setFilesPresent(true);
-      files.current = acceptedFiles;
-    },
-    []
-  );
+  const onDrop: OnDropHandler = useCallback((acceptedFiles: File[]) => {
+    setFilesPresent(true);
+    files.current = acceptedFiles;
+  }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
@@ -43,9 +48,9 @@ const FileUpload: FC<Props> = ({ accept, handleUpload, loadingState }) => {
         >
           <input {...getInputProps()} accept={accept} />
           {isDragActive ? (
-            <Typography>Drop invoice here</Typography>
+            <Typography>{draggingText}</Typography>
           ) : (
-            <Typography>Upload Invoice</Typography>
+            <Typography>{idleText}</Typography>
           )}
         </Paper>
       )}

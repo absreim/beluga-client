@@ -1,38 +1,103 @@
-import { InvoiceLineItem } from "../invoice/slice.ts";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../redux/store.ts";
-
-type PurchaseOrderLineItem = InvoiceLineItem;
+import { LineItem } from "../../components/LineItemDataGrid.tsx";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppDispatch, RootState } from "../../redux/store.ts";
+import Papa from "papaparse";
+import { nanoid } from "nanoid/non-secure";
 
 export interface PurchaseOrderState {
-  lineItems: PurchaseOrderLineItem[];
+  lineItems: LineItem[];
+  status: "idle" | "loading" | "failed";
 }
 
 const initialState: PurchaseOrderState = {
   lineItems: [],
+  status: "idle",
 };
+
+type LineItemCsvRow = [
+  productCode: string,
+  description: string,
+  quantity: string,
+  unitPrice: string,
+  totalAmount: string
+];
+
+export const importCsv = createAsyncThunk<
+  LineItem[],
+  File,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: Papa.ParseError[];
+  }
+>("purchaseOrder/importCsv", async (csvFile: File) => {
+  const results: LineItemCsvRow[] = await new Promise((resolve, reject) => {
+    Papa.parse(csvFile, {
+      complete: ({ data, errors }) => {
+        if (errors.length > 0) {
+          reject(errors);
+        }
+        resolve(data as LineItemCsvRow[]);
+      },
+    });
+  });
+  return results.map((result) => {
+    const [productCode, description, quantity, unitPrice, totalAmount] = result;
+    return {
+      id: nanoid(),
+      productCode,
+      description,
+      quantity: quantity ? Number(quantity) : null,
+      totalAmount: totalAmount ? Number(totalAmount) : null,
+      unitPrice: unitPrice ? Number(unitPrice) : null,
+    };
+  });
+});
 
 export const slice = createSlice({
   name: "purchaseOrder",
   initialState,
   reducers: {
-    addRow: (state, action: PayloadAction<PurchaseOrderLineItem>) => {
-      state.lineItems.push(action.payload);
+    addRows: (state, action: PayloadAction<LineItem[]>) => {
+      state.lineItems.push(...action.payload);
     },
-    editRow: (
-      state,
-      action: PayloadAction<{ index: number; item: InvoiceLineItem }>
-    ) => {
-      state.lineItems[action.payload.index] = action.payload.item;
+    editRow: (state, action: PayloadAction<LineItem>) => {
+      const foundIndex = state.lineItems.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (foundIndex >= 0) {
+        state.lineItems[foundIndex] = action.payload;
+      }
     },
-    deleteRow: (state, action: PayloadAction<number>) => {
-      state.lineItems.splice(action.payload, 1);
+    deleteRow: (state, action: PayloadAction<string>) => {
+      const foundIndex = state.lineItems.findIndex(
+        (item) => item.id === action.payload
+      );
+      if (foundIndex >= 0) {
+        state.lineItems.splice(foundIndex, 1);
+      }
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(importCsv.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(importCsv.fulfilled, (state, action) => {
+      state.status = "idle";
+      state.lineItems = action.payload;
+    });
+    builder.addCase(importCsv.rejected, (state) => {
+      state.status = "failed";
+    });
   },
 });
 
-export const { addRow, editRow, deleteRow } = slice.actions;
+export const { addRows, editRow, deleteRow } = slice.actions;
 
-export const selectLineItems = (state: RootState) => state.purchaseOrder.lineItems
+export const selectLineItems = (state: RootState) =>
+  state.purchaseOrder.lineItems;
 
-export default slice.reducer
+export const selectLoadingState = (state: RootState) =>
+  state.purchaseOrder.status;
+
+export default slice.reducer;

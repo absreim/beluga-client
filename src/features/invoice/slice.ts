@@ -2,18 +2,10 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/store";
 import { fetchDocumentAiResults } from "./api";
 import { nanoid } from "nanoid/non-secure";
-
-export interface InvoiceLineItem {
-  id: string;
-  productCode: string;
-  description: string;
-  quantity: number | null;
-  totalAmount: number | null;
-  unitPrice: number | null;
-}
+import { LineItem } from "../../components/LineItemDataGrid.tsx";
 
 export interface InvoiceState {
-  lineItems: InvoiceLineItem[] | null;
+  lineItems: LineItem[] | null;
   status: "idle" | "loading" | "failed";
 }
 
@@ -57,7 +49,7 @@ export const uploadInvoice = createAsyncThunk(
     return json[0].document.entities
       .filter(({ type }) => type === "line_item")
       .map(({ properties }) => {
-        const row: InvoiceLineItem = {
+        const row: LineItem = {
           id: nanoid(),
           productCode: "",
           description: "",
@@ -100,15 +92,35 @@ export const slice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    deleteRow: (state, action: PayloadAction<number>) => {
-      state.lineItems && state.lineItems.splice(action.payload, 1);
+    addRows: (state, action: PayloadAction<LineItem[]>) => {
+      if (state.lineItems) {
+        state.lineItems.push(...action.payload);
+      }
+      else {
+        state.lineItems = action.payload
+      }
     },
-    editRow: (
-      state,
-      action: PayloadAction<{ index: number; item: InvoiceLineItem }>
-    ) => {
-      state.lineItems &&
-        (state.lineItems[action.payload.index] = action.payload.item);
+    editRow: (state, action: PayloadAction<LineItem>) => {
+      if (!state.lineItems) {
+        return
+      }
+      const foundIndex = state.lineItems.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (foundIndex >= 0) {
+        state.lineItems[foundIndex] = action.payload;
+      }
+    },
+    deleteRow: (state, action: PayloadAction<string>) => {
+      if (!state.lineItems) {
+        return
+      }
+      const foundIndex = state.lineItems.findIndex(
+        (item) => item.id === action.payload
+      );
+      if (foundIndex >= 0) {
+        state.lineItems.splice(foundIndex, 1);
+      }
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -128,7 +140,7 @@ export const slice = createSlice({
   },
 });
 
-export const { deleteRow, editRow } = slice.actions;
+export const { addRows, deleteRow, editRow } = slice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
