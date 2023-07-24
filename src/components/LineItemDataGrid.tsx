@@ -9,14 +9,14 @@ import CancelIcon from "@mui/icons-material/Close";
 import {
   GridRowModesModel,
   GridRowModes,
-  DataGridPro,
+  DataGrid,
   GridColDef,
   GridToolbarContainer,
   GridActionsCellItem,
   GridEventListener,
   GridRowId,
   GridRowEditStopReasons,
-} from "@mui/x-data-grid-pro";
+} from "@mui/x-data-grid";
 import { nanoid } from "nanoid/non-secure";
 import { FC } from "react";
 
@@ -123,36 +123,41 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
       field: "productCode",
       headerName: "Product Code",
       editable: true,
+      flex: 1.5
     },
     {
       field: "description",
       headerName: "Description",
       editable: true,
-      width: 300
+      flex: 5
     },
     {
       field: "quantity",
       headerName: "Quantity",
       type: "number",
       editable: true,
+      flex: 1
     },
     {
       field: "unitPrice",
       headerName: "Unit Price",
       type: "number",
       editable: true,
+      flex: 1.5
     },
     {
       field: "totalAmount",
       headerName: "Total Amount",
       type: "number",
       editable: true,
+      flex: 1.5
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       width: 100,
+      flex: 1.5,
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -209,7 +214,7 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
         },
       }}
     >
-      <DataGridPro
+      <DataGrid
         rows={rows}
         columns={columns}
         editMode="row"
