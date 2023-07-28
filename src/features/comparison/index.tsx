@@ -71,7 +71,9 @@ const Comparison: FC = () => {
       {results && (
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Typography variant="h6" component="h3">Matched Descriptions</Typography>
+            <Typography variant="h6" component="h3">
+              Matched Descriptions
+            </Typography>
             {results.matches.length > 0 ? (
               <TableContainer>
                 <Table>
@@ -96,7 +98,9 @@ const Comparison: FC = () => {
             )}
           </Grid>
           <Grid item xs={12} md={6}>
-            <Typography variant="h6" component="h3">Unmatched Descriptions</Typography>
+            <Typography variant="h6" component="h3">
+              Unmatched Descriptions
+            </Typography>
             {results.unmatched.length > 0 ? (
               <List>
                 {results.unmatched.map((desc, index) => (

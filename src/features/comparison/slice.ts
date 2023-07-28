@@ -3,12 +3,14 @@ import { fetchChatgptResults } from "./api.ts";
 import { RootState } from "../../redux/store.ts";
 
 type ChatgptResults = {
-  choices: [{
-    message: {
-      content: string
+  choices: [
+    {
+      message: {
+        content: string;
+      };
     }
-  }]
-}
+  ];
+};
 
 interface ComparisonResults {
   matches: [[poDesc: string, invoiceDesc: string]];
@@ -35,8 +37,10 @@ export const chatgptCompare = createAsyncThunk(
     invoiceDescs: string[];
   }) => {
     const response = await fetchChatgptResults(poDescs, invoiceDescs);
-    const chatgptOutput: ChatgptResults = (await response.json());
-    return JSON.parse(chatgptOutput.choices[0].message.content) as ComparisonResults
+    const chatgptOutput: ChatgptResults = await response.json();
+    return JSON.parse(
+      chatgptOutput.choices[0].message.content
+    ) as ComparisonResults;
   }
 );
 

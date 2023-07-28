@@ -95,14 +95,13 @@ export const slice = createSlice({
     addRows: (state, action: PayloadAction<LineItem[]>) => {
       if (state.lineItems) {
         state.lineItems.push(...action.payload);
-      }
-      else {
-        state.lineItems = action.payload
+      } else {
+        state.lineItems = action.payload;
       }
     },
     editRow: (state, action: PayloadAction<LineItem>) => {
       if (!state.lineItems) {
-        return
+        return;
       }
       const foundIndex = state.lineItems.findIndex(
         (item) => item.id === action.payload.id
@@ -113,7 +112,7 @@ export const slice = createSlice({
     },
     deleteRow: (state, action: PayloadAction<string>) => {
       if (!state.lineItems) {
-        return
+        return;
       }
       const foundIndex = state.lineItems.findIndex(
         (item) => item.id === action.payload
@@ -121,6 +120,9 @@ export const slice = createSlice({
       if (foundIndex >= 0) {
         state.lineItems.splice(foundIndex, 1);
       }
+    },
+    replaceRows: (state, action: PayloadAction<LineItem[]>) => {
+      state.lineItems = action.payload;
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -140,7 +142,7 @@ export const slice = createSlice({
   },
 });
 
-export const { addRows, deleteRow, editRow } = slice.actions;
+export const { addRows, deleteRow, editRow, replaceRows } = slice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

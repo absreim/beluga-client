@@ -77,6 +77,9 @@ export const slice = createSlice({
         state.lineItems.splice(foundIndex, 1);
       }
     },
+    replaceRows: (state, action: PayloadAction<LineItem[]>) => {
+      state.lineItems = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(importCsv.pending, (state) => {
@@ -92,7 +95,7 @@ export const slice = createSlice({
   },
 });
 
-export const { addRows, editRow, deleteRow } = slice.actions;
+export const { addRows, editRow, deleteRow, replaceRows } = slice.actions;
 
 export const selectLineItems = (state: RootState) =>
   state.purchaseOrder.lineItems;

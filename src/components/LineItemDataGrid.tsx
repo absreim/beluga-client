@@ -34,6 +34,7 @@ interface LineItemDataGridProps {
   addRows: (rows: LineItem[]) => void;
   editRow: (row: LineItem) => void;
   deleteRow: (id: string) => void;
+  readOnly?: boolean;
 }
 
 interface EditToolbarProps {
@@ -76,6 +77,7 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
   addRows,
   editRow,
   deleteRow,
+  readOnly,
 }) => {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
@@ -122,37 +124,40 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
     {
       field: "productCode",
       headerName: "Product Code",
-      editable: true,
-      flex: 1.5
+      editable: !readOnly,
+      flex: 1.5,
     },
     {
       field: "description",
       headerName: "Description",
-      editable: true,
-      flex: 5
+      editable: !readOnly,
+      flex: 5,
     },
     {
       field: "quantity",
       headerName: "Quantity",
       type: "number",
-      editable: true,
-      flex: 1
+      editable: !readOnly,
+      flex: 1,
     },
     {
       field: "unitPrice",
       headerName: "Unit Price",
       type: "number",
-      editable: true,
-      flex: 1.5
+      editable: !readOnly,
+      flex: 1.5,
     },
     {
       field: "totalAmount",
       headerName: "Total Amount",
       type: "number",
-      editable: true,
-      flex: 1.5
+      editable: !readOnly,
+      flex: 1.5,
     },
-    {
+  ];
+
+  if (!readOnly) {
+    columns.push({
       field: "actions",
       type: "actions",
       headerName: "Actions",
@@ -198,8 +203,8 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
           />,
         ];
       },
-    },
-  ];
+    });
+  }
 
   return (
     <Box
@@ -223,7 +228,7 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         slots={{
-          toolbar: EditToolbar,
+          toolbar: readOnly ? null : EditToolbar,
         }}
         slotProps={{
           toolbar: { addRows, setRowModesModel },
