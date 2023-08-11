@@ -29,12 +29,15 @@ export interface LineItem {
   unitPrice: number | null;
 }
 
-interface LineItemDataGridProps {
-  rows: LineItem[];
+interface LineItemDataGridMutations {
   addRows: (rows: LineItem[]) => void;
   editRow: (row: LineItem) => void;
   deleteRow: (id: string) => void;
-  readOnly?: boolean;
+}
+
+interface LineItemDataGridProps {
+  rows: LineItem[];
+  mutations?: LineItemDataGridMutations // undefined implies a read=only component
 }
 
 interface EditToolbarProps {
@@ -74,11 +77,13 @@ const EditToolbar: FC<EditToolbarProps> = ({ addRows, setRowModesModel }) => {
 
 const LineItemDataGrid: FC<LineItemDataGridProps> = ({
   rows,
-  addRows,
-  editRow,
-  deleteRow,
-  readOnly,
+  mutations
 }) => {
+  const readOnly = !!mutations
+  const addRows = mutations?.addRows
+  const editRow = mutations?.editRow
+  const deleteRow = mutations?.deleteRow
+
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
@@ -101,7 +106,7 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
   };
 
   const handleDeleteClick = (id: string) => () => {
-    deleteRow(id);
+    deleteRow && deleteRow(id);
   };
 
   const handleCancelClick = (id: string) => () => {
@@ -112,7 +117,7 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
   };
 
   const processRowUpdate = (newRow: LineItem) => {
-    editRow(newRow);
+    editRow && editRow(newRow);
     return newRow;
   };
 
@@ -230,7 +235,7 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
         slots={{
           toolbar: readOnly ? null : EditToolbar,
         }}
-        slotProps={{
+        slotProps={addRows && {
           toolbar: { addRows, setRowModesModel },
         }}
       />

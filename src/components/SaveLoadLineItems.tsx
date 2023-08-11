@@ -11,10 +11,6 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-/* eslint-disable @typescript-eslint/no-empty-function */
-// TODO: Modify LineItemDataGrid to have a read-only mode without having to
-// pass empty functions.
-
 interface Props {
   localStorageKey: string;
   currentRows: LineItem[] | null;
@@ -69,10 +65,6 @@ const SaveLoadLineItems: FC<Props> = ({
         {savedRows ? (
           <LineItemDataGrid
             rows={savedRows}
-            addRows={() => {}}
-            editRow={() => {}}
-            deleteRow={() => {}}
-            readOnly
           />
         ) : (
           <Alert color="info">No saved items.</Alert>

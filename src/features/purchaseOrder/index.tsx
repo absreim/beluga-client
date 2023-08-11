@@ -36,9 +36,11 @@ const PurchaseOrder: FC = () => {
       )}
       <LineItemDataGrid
         rows={lineItems}
-        addRows={dispatchAddRows}
-        editRow={dispatchEditRow}
-        deleteRow={dispatchDeleteRow}
+        mutations={{
+          addRows: dispatchAddRows,
+          editRow: dispatchEditRow,
+          deleteRow: dispatchDeleteRow
+        }}
       />
       <SaveLoadLineItems
         localStorageKey={"purchaseOrder"}

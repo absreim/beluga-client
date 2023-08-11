@@ -35,9 +35,11 @@ const Invoice: FC = () => {
       return (
           <LineItemDataGrid
             rows={lineItems}
-            addRows={dispatchAddRows}
-            editRow={dispatchEditRow}
-            deleteRow={dispatchDeleteRow}
+            mutations={{
+              addRows: dispatchAddRows,
+              editRow: dispatchEditRow,
+              deleteRow: dispatchDeleteRow
+            }}
           />
       );
     }
