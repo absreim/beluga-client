@@ -19,6 +19,7 @@ import {
 } from "@mui/x-data-grid";
 import { nanoid } from "nanoid/non-secure";
 import { FC } from "react";
+import { Tooltip } from "@mui/material";
 
 export interface LineItem {
   id: string;
@@ -37,7 +38,7 @@ interface LineItemDataGridMutations {
 
 interface LineItemDataGridProps {
   rows: LineItem[];
-  mutations?: LineItemDataGridMutations // undefined implies a read=only component
+  mutations?: LineItemDataGridMutations; // undefined implies a read=only component
 }
 
 interface EditToolbarProps {
@@ -75,14 +76,11 @@ const EditToolbar: FC<EditToolbarProps> = ({ addRows, setRowModesModel }) => {
   );
 };
 
-const LineItemDataGrid: FC<LineItemDataGridProps> = ({
-  rows,
-  mutations
-}) => {
-  const readOnly = !!mutations
-  const addRows = mutations?.addRows
-  const editRow = mutations?.editRow
-  const deleteRow = mutations?.deleteRow
+const LineItemDataGrid: FC<LineItemDataGridProps> = ({ rows, mutations }) => {
+  const readOnly = !mutations;
+  const addRows = mutations?.addRows;
+  const editRow = mutations?.editRow;
+  const deleteRow = mutations?.deleteRow;
 
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
@@ -175,7 +173,11 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon />}
+              icon={
+                <Tooltip title="Save">
+                  <SaveIcon />
+                </Tooltip>
+              }
               label="Save"
               sx={{
                 color: "primary.main",
@@ -183,7 +185,11 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={
+                <Tooltip title="Cancel">
+                  <CancelIcon />
+                </Tooltip>
+              }
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id as string)}
@@ -194,14 +200,22 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={
+              <Tooltip title="Edit">
+                <EditIcon />
+              </Tooltip>
+            }
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+            icon={
+              <Tooltip title="Delete">
+                <DeleteIcon />
+              </Tooltip>
+            }
             label="Delete"
             onClick={handleDeleteClick(id as string)}
             color="inherit"
@@ -235,9 +249,11 @@ const LineItemDataGrid: FC<LineItemDataGridProps> = ({
         slots={{
           toolbar: readOnly ? null : EditToolbar,
         }}
-        slotProps={addRows && {
-          toolbar: { addRows, setRowModesModel },
-        }}
+        slotProps={
+          addRows && {
+            toolbar: { addRows, setRowModesModel },
+          }
+        }
       />
     </Box>
   );
